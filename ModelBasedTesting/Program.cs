@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Reflection;
 using Newtonsoft.Json.Linq;
+using ModelBasedTesting.Helpers;
 
 namespace ModelBasedTesting
 {
@@ -26,7 +27,7 @@ namespace ModelBasedTesting
                 JObject nextStep = GraphWalkerClient.getNext();
 
                 // Create a mapping from the model name to an actual class.
-                Type modelClass = Type.GetType($"ModelBasedTesting.{nextStep.GetValue("modelName").ToString()}");
+                Type modelClass = Type.GetType($"{nextStep.GetValue("modelName").ToString()}");
                 ConstructorInfo constructor = modelClass.GetConstructor(System.Type.EmptyTypes);
 
                 // Invoke a method to call. If the currentElementName is null,

@@ -3,7 +3,7 @@ using System.IO;
 using Newtonsoft.Json.Linq;
 using RestSharp;
 
-namespace ModelBasedTesting
+namespace ModelBasedTesting.Helpers
 {
     static class GraphWalkerClient
     {
