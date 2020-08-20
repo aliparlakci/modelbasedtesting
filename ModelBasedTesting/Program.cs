@@ -49,6 +49,7 @@ namespace ModelBasedTesting
                     methodInfo.Invoke(instance, new object[] { });
                 }
             }
+            Browser.GetWebDriver().Quit();
         }
     }
 }

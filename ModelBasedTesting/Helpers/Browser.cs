@@ -12,7 +12,9 @@ namespace ModelBasedTesting.Helpers
         {
             if (driver == null)
             {
-                driver = new ChromeDriver(@"C:\Program Files (x86)\Google\Chrome\Application\");
+                ChromeOptions options = new ChromeOptions();
+                options.AddArguments("--ignore-ssl-errors=yes", "--ignore-certificate-errors");
+                driver = new ChromeDriver(@"C:\Program Files (x86)\Google\Chrome\Application\", options = options);
                 driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(30);
             }
             return driver;
