@@ -27,9 +27,8 @@ namespace ModelBasedTesting.Helpers
         {
             IRestResponse restResponse = client.Execute(requestHasNext);
             checkError(restResponse);
-
             JObject jsonResponse = JObject.Parse(restResponse.Content);
-            return jsonResponse.GetValue("result").ToString().Equals("ok") || jsonResponse.GetValue("hasNext").ToString().Equals("true");
+            return jsonResponse.GetValue("result").ToString().Equals("ok") && jsonResponse.GetValue("hasNext").ToString().Equals("true");
         }
 
         public static JObject getNext()
@@ -42,6 +41,7 @@ namespace ModelBasedTesting.Helpers
         public static JObject getData()
         {
             IRestResponse restResponse = client.Execute(requestGetData);
+            checkError(restResponse);
             JObject jsonResponse = JObject.Parse(restResponse.Content);
             return JObject.Parse(jsonResponse.GetValue("data").DeepClone().ToString());
         }
@@ -63,6 +63,8 @@ namespace ModelBasedTesting.Helpers
             string model = File.ReadAllText(modelLocation);
             requestLoad.AddHeader("Content-Type", "text/plain");
             requestLoad.AddParameter("text/plain", model, ParameterType.RequestBody);
+            IRestResponse restResponse = client.Execute(requestLoad);
+            checkError(restResponse);
         }
 
         public static string getStatistics()

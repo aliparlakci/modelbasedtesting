@@ -1,0 +1,60 @@
+{
+  "name": "Default Models",
+  "models": [
+    {
+      "name": "LoginSharedState",
+      "generator": "random(edge_coverage(100))",
+      "startElementId": "e0",
+      "vertices": [
+        {
+          "id": "v1",
+          "name": "v_HomePage",
+          "sharedState": "Home"
+        },
+        {
+          "id": "v0",
+          "name": "v_LoginPage",
+          "sharedState": "Login"
+        }
+      ],
+      "edges": [
+        {
+          "id": "e0",
+          "name": "e_StartBrowser",
+          "targetVertexId": "v0"
+        },
+        {
+          "id": "e1",
+          "name": "e_Login",
+          "sourceVertexId": "v0",
+          "targetVertexId": "v1"
+        }
+      ]
+    },
+    {
+      "name": "HomeSharedState",
+      "generator": "random(edge_coverage(100))",
+      "startElementId": "",
+      "vertices": [
+        {
+          "id": "v3",
+          "name": "v_HomePage",
+          "sharedState": "Home"
+        },
+        {
+          "id": "v2",
+          "name": "v_LoginPage",
+          "sharedState": "Login"
+        }
+      ],
+      "edges": [
+        {
+          "id": "e2",
+          "name": "e_Logout",
+          "sourceVertexId": "v3",
+          "targetVertexId": "v2"
+        }
+      ]
+    }
+  ]
+}
