@@ -1,32 +1,50 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.Reflection;
+using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json.Linq;
 using ModelBasedTesting.SharedStates;
 using ModelBasedTesting.Helpers;
+using Microsoft.Extensions.Logging;
 
 namespace ModelBasedTesting
 {
     class Program
     {
-        static void Main(string[] args)
+        static int Main(string[] args)
         {
-            // if (args.Length == 0)
-            // {
-            //     System.Console.WriteLine("Please enter the path and file name for the model");
-            //     return;
-            // }
+            ServiceCollection serviceCollection = new ServiceCollection();
+            ConfigureServices(serviceCollection);
 
-            //run(args[1]);
-            run(@"C:\Users\ali.parlakci\Desktop\ModelBasedTesting\ModelBasedTesting\Models.json");
+            ServiceProvider serviceProvider = serviceCollection.BuildServiceProvider();
+
+            if (args.Length == 0)
+            {
+                System.Console.WriteLine("Please enter the path and file name for the model");
+                return 1;
+            }
+
+            return run(args[0]);
 
         }
-        static void run(string modelLocation)
+
+        private static void ConfigureServices(IServiceCollection services)
         {
+            services.AddLogging(configure => configure.AddConsole())
+                .Configure<LoggerFilterOptions>(
+                    options => options.MinLevel = LogLevel.Information
+                );
+        }
+
+        static int run(string modelLocation)
+        {
+
+            Browser browser = new Browser();
+
             Dictionary<string, Type> sharedStates = new Dictionary<string, Type>()
             {
-                { "HomeSharedState", typeof(HomeSharedState) },
-                { "LoginSharedState", typeof(LoginSharedState) }
+                { "USONPMSharedState", typeof(USONPMSharedState) }
             };
 
             GraphWalkerClient.load(modelLocation);
@@ -37,19 +55,32 @@ namespace ModelBasedTesting
 
                 string className = $"{nextStep.GetValue("modelName").ToString()}";
                 Type modelClass = sharedStates[className];
-                ConstructorInfo constructor = modelClass.GetConstructor(System.Type.EmptyTypes);
+                ConstructorInfo constructor = modelClass.GetConstructor(new Type[] { typeof(Browser) });
 
-                if (nextStep.GetValue("currentElementName") != null)
+                if (nextStep.GetValue("currentElementName").ToString() != "")
                 {
                     Console.WriteLine($"Model and element to be called: {nextStep.GetValue("modelName").ToString()}.{nextStep.GetValue("currentElementName").ToString()}");
 
-                    object instance = constructor.Invoke(null);
+                    object instance = constructor.Invoke(new object[] { browser });
 
                     MethodInfo methodInfo = modelClass.GetMethod(nextStep.GetValue("currentElementName").ToString());
-                    methodInfo.Invoke(instance, new object[] { });
+                    try
+                    {
+                        methodInfo.Invoke(instance, new object[] { });
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine($"    ERROR: {e.InnerException.Message}");
+                        return 1;
+                    }
+                    finally
+                    {
+                    }
+
                 }
             }
-            Browser.GetWebDriver().Quit();
+
+            return 0;
         }
     }
 }
