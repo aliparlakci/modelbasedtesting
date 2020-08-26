@@ -7,7 +7,7 @@ Model is contained in the `ModelBasedTesting/Model.json`. You can use [AltWalker
 
 - .NET Core 3.1 SDK
 - Java SE Runtime Environment
-- Below process must be running in order for project to runs
+- Below process must be running in order for the project to run
 
 ```bash
 java -jar graphwalker-cli-4.2.0.jar online --verbose --service RESTFUL
