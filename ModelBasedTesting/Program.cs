@@ -44,7 +44,7 @@ namespace ModelBasedTesting
 
             Dictionary<string, Type> sharedStates = new Dictionary<string, Type>()
             {
-                { "USONPMSharedState", typeof(USONPMSharedState) }
+                { "TwitterSharedState", typeof(TwitterSharedState) }
             };
 
             GraphWalkerClient.load(modelLocation);
@@ -71,6 +71,7 @@ namespace ModelBasedTesting
                     catch (Exception e)
                     {
                         Console.WriteLine($"    ERROR: {e.InnerException.Message}");
+                        throw e.InnerException;
                         return 1;
                     }
                     finally

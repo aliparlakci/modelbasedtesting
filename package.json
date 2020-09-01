@@ -1,0 +1,5 @@
+{
+  "scripts": {
+    "start": "dotnet run --project .\\ModelBasedTesting\\ModelBasedTesting.csproj -- .\\ModelBasedTesting\\Model.json"
+  }
+}
